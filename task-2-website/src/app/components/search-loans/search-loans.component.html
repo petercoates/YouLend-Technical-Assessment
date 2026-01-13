@@ -1,0 +1,49 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Search Loans by Borrower</mat-card-title>
+  </mat-card-header>
+  
+  <mat-card-content>
+    <div class="search-form">
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-label>Borrower Name</mat-label>
+        <input matInput [(ngModel)]="searchName" placeholder="Enter borrower name" (keyup.enter)="searchLoans()">
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" (click)="searchLoans()" [disabled]="!searchName.trim() || isSearching">
+        {{ isSearching ? 'Searching...' : 'Search' }}
+      </button>
+
+      <button mat-button (click)="clearSearch()" *ngIf="hasSearched">
+        Clear
+      </button>
+    </div>
+
+    <!-- Search Results -->
+    <div *ngIf="hasSearched && !isSearching" class="search-results">
+      <div *ngIf="searchResults.length === 0" class="no-results">
+        No loans found for "{{ searchName }}"
+      </div>
+
+      <mat-list *ngIf="searchResults.length > 0">
+        <h3 mat-subheader>Found {{ searchResults.length }} loan(s)</h3>
+        <mat-list-item *ngFor="let loan of searchResults" class="loan-item">
+          <div class="loan-details">
+            <div class="loan-header">
+              <strong>{{ loan.borrowerName }}</strong>
+              <span class="loan-id">ID: {{ loan.loanId.substring(0, 8) }}...</span>
+            </div>
+            <div class="loan-amounts">
+              <span>Funding: {{ formatCurrency(loan.fundingAmount) }}</span>
+              <span>Repayment: {{ formatCurrency(loan.repaymentAmount) }}</span>
+              <span>Created: {{ formatDate(loan.createdAt) }}</span>
+            </div>
+          </div>
+          <button mat-icon-button color="warn" (click)="deleteLoan(loan.loanId)" class="delete-btn">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </mat-list-item>
+      </mat-list>
+    </div>
+  </mat-card-content>
+</mat-card>

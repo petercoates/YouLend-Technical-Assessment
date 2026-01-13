@@ -1,0 +1,107 @@
+# ============================================================================
+# YouLend Loan Management Website - Kubernetes Deployment
+# ============================================================================
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: loan-website
+  namespace: youlend
+  labels:
+    app: loan-website
+spec:
+  replicas: 2
+  
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  
+  selector:
+    matchLabels:
+      app: loan-website
+  
+  template:
+    metadata:
+      labels:
+        app: loan-website
+    
+    spec:
+      containers:
+      - name: loan-website
+        # Replace with your actual image from Docker Hub or ECR
+        image: youlend-loan-website:latest
+        imagePullPolicy: IfNotPresent
+        
+        ports:
+        - name: http
+          containerPort: 80
+          protocol: TCP
+        
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "50m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
+        
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 3
+          failureThreshold: 3
+        
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+
+---
+# Service for Website
+apiVersion: v1
+kind: Service
+metadata:
+  name: loan-website-service
+  namespace: youlend
+  labels:
+    app: loan-website
+spec:
+  type: ClusterIP
+  selector:
+    app: loan-website
+  ports:
+  - name: http
+    port: 80
+    targetPort: 80
+    protocol: TCP
+
+---
+# HorizontalPodAutoscaler for Website
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: loan-website-hpa
+  namespace: youlend
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: loan-website
+  minReplicas: 2
+  maxReplicas: 5
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70

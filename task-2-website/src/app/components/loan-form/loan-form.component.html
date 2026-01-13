@@ -1,0 +1,58 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Create New Loan</mat-card-title>
+  </mat-card-header>
+  
+  <mat-card-content>
+    <form [formGroup]="loanForm" (ngSubmit)="onSubmit()" class="loan-form">
+      
+      <!-- Borrower Name -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Borrower Name</mat-label>
+        <input matInput formControlName="borrowerName" placeholder="Enter borrower name" required>
+        <mat-error *ngIf="loanForm.get('borrowerName')?.invalid">
+          {{ getErrorMessage('borrowerName') }}
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Funding Amount -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Funding Amount</mat-label>
+        <input 
+          matInput 
+          type="number" 
+          formControlName="fundingAmount" 
+          placeholder="50000" 
+          step="100"
+          (input)="onFundingAmountChange()"
+          required>
+        <span matPrefix>£&nbsp;</span>
+        <mat-error *ngIf="loanForm.get('fundingAmount')?.invalid">
+          {{ getErrorMessage('fundingAmount') }}
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Repayment Amount -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Repayment Amount (Auto-calculated with 10% interest)</mat-label>
+        <input 
+          matInput 
+          type="number" 
+          formControlName="repaymentAmount" 
+          placeholder="55000" 
+          step="100"
+          required
+          readonly>
+        <span matPrefix>£&nbsp;</span>
+        <mat-error *ngIf="loanForm.get('repaymentAmount')?.invalid">
+          {{ getErrorMessage('repaymentAmount') }}
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Submit Button -->
+      <button mat-raised-button color="primary" type="submit" [disabled]="loanForm.invalid || isSubmitting">
+        {{ isSubmitting ? 'Creating...' : 'Create Loan' }}
+      </button>
+    </form>
+  </mat-card-content>
+</mat-card>

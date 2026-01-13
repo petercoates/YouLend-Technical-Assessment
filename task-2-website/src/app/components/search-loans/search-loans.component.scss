@@ -1,0 +1,160 @@
+mat-card {
+  margin: 20px 0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+mat-card-title {
+  font-size: 24px;
+  font-weight: 500;
+  color: #3f51b5;
+}
+
+.search-form {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 0;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: stretch;
+
+    button {
+      width: 100%;
+    }
+  }
+}
+
+.search-field {
+  flex: 1;
+}
+
+.search-results {
+  margin-top: 20px;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.no-results {
+  text-align: center;
+  padding: 60px 40px;
+  color: #666;
+  font-size: 16px;
+  background: #f9f9f9;
+  border-radius: 8px;
+}
+
+mat-list {
+  padding: 0;
+}
+
+h3[mat-subheader] {
+  font-size: 16px;
+  font-weight: 500;
+  color: #3f51b5;
+  padding: 12px 16px;
+  background: #f5f5f5;
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+
+.loan-item {
+  border-bottom: 1px solid #e0e0e0;
+  padding: 20px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: #fafafa;
+    padding-left: 24px;
+  }
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.loan-details {
+  flex: 1;
+}
+
+.loan-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+
+  strong {
+    font-size: 18px;
+    color: #333;
+  }
+}
+
+.loan-id {
+  color: #999;
+  font-size: 12px;
+  font-family: monospace;
+  background: #f5f5f5;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.loan-amounts {
+  display: flex;
+  gap: 24px;
+  font-size: 14px;
+  color: #666;
+
+  span {
+    display: flex;
+    align-items: center;
+
+    &::before {
+      content: '•';
+      margin-right: 8px;
+      color: #3f51b5;
+      font-weight: bold;
+    }
+
+    &:first-child::before {
+      content: '£';
+      color: #4caf50;
+    }
+
+    &:nth-child(2)::before {
+      content: '£';
+      color: #ff9800;
+    }
+
+    &:last-child::before {
+      content: '📅';
+    }
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+
+.delete-btn {
+  margin-left: 16px;
+  transition: all 0.2s ease;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+}

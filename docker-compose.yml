@@ -1,0 +1,42 @@
+
+services:
+  # ==========================================================================
+  # API Service - .NET Backend
+  # ==========================================================================
+  api:
+    build:
+      context: ./task-1-api
+      dockerfile: Dockerfile
+    container_name: youlend-api
+    ports:
+      - "5103:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:8080
+    networks:
+      - youlend-network
+    restart: unless-stopped
+
+  # ==========================================================================
+  # Website Service - Angular Frontend
+  # ==========================================================================
+  website:
+    build:
+      context: ./task-2-website
+      dockerfile: Dockerfile
+    container_name: youlend-website
+    ports:
+      - "4200:80"
+    depends_on:
+      - api
+    networks:
+      - youlend-network
+    restart: unless-stopped
+
+# ==========================================================================
+# Networks
+# ==========================================================================
+networks:
+  youlend-network:
+    driver: bridge
+    name: youlend-network

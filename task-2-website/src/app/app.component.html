@@ -1,0 +1,22 @@
+<!-- Header -->
+<mat-toolbar color="primary">
+  <mat-icon>account_balance</mat-icon>
+  <span>{{ title }}</span>
+</mat-toolbar>
+
+<!-- Main Content -->
+<div class="container">
+  <!-- Create Loan Form -->
+  <app-loan-form (loanCreated)="onLoanCreated()"></app-loan-form>
+
+  <!-- Search Loans -->
+  <app-search-loans></app-search-loans>
+
+  <!-- Loan List -->
+  <app-loan-list></app-loan-list>
+</div>
+
+<!-- Footer -->
+<footer>
+  <p>YouLend Technical Assessment - Task 2 | Platform Engineer</p>
+</footer>

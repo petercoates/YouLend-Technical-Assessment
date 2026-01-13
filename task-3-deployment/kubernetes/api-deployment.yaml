@@ -1,0 +1,123 @@
+# ============================================================================
+# YouLend Loan Management API - Kubernetes Deployment
+# ============================================================================
+
+# Create namespace
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: youlend
+  labels:
+    name: youlend
+
+---
+# Deployment for API
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: loan-api
+  namespace: youlend
+  labels:
+    app: loan-api
+spec:
+  replicas: 3
+  
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  
+  selector:
+    matchLabels:
+      app: loan-api
+  
+  template:
+    metadata:
+      labels:
+        app: loan-api
+    
+    spec:
+      containers:
+      - name: loan-api
+        # Replace with your actual image from Docker Hub or ECR
+        image: youlend-loan-api:latest
+        imagePullPolicy: IfNotPresent
+        
+        ports:
+        - name: http
+          containerPort: 8080
+          protocol: TCP
+        
+        env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: "Production"
+        - name: ASPNETCORE_URLS
+          value: "http://+:8080"
+        
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 3
+          failureThreshold: 3
+        
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+
+---
+# Service for API
+apiVersion: v1
+kind: Service
+metadata:
+  name: loan-api-service
+  namespace: youlend
+  labels:
+    app: loan-api
+spec:
+  type: ClusterIP
+  selector:
+    app: loan-api
+  ports:
+  - name: http
+    port: 80
+    targetPort: 8080
+    protocol: TCP
+
+---
+# HorizontalPodAutoscaler for API
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: loan-api-hpa
+  namespace: youlend
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: loan-api
+  minReplicas: 3
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
