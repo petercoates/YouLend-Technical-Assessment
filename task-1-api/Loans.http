@@ -1,0 +1,215 @@
+### YouLend Loan Management API - Test Requests
+@baseUrl = http://localhost:5103
+@apiPath = {{baseUrl}}/api/loans
+
+### Variables for testing
+@loanId = {{createLoan.response.body.$.loanId}}
+
+# ==============================================================================
+# HEALTH CHECK
+# ==============================================================================
+
+### Check API Health
+GET {{baseUrl}}/health
+
+# ==============================================================================
+# CREATE LOANS (POST)
+# ==============================================================================
+
+### Create Loan - Peter Coates
+# @name createLoan
+POST {{apiPath}}
+Content-Type: application/json
+
+{
+  "borrowerName": "Peter Coates",
+  "fundingAmount": 50000.00,
+  "repaymentAmount": 55000.00
+}
+
+### Create Loan - Omar Din
+POST {{apiPath}}
+Content-Type: application/json
+
+{
+  "borrowerName": "Omar Din",
+  "fundingAmount": 100000.00,
+  "repaymentAmount": 110000.00
+}
+
+### Create Loan - Charlotte Rodriguez 
+POST {{apiPath}}
+Content-Type: application/json
+
+{
+  "borrowerName": "Charlotte Rodriguez",
+  "fundingAmount": 250000.00,
+  "repaymentAmount": 275000.00
+}
+
+### Create Loan - Multiple for Same Borrower (Peter Coates)
+POST {{apiPath}}
+Content-Type: application/json
+
+{
+  "borrowerName": "Peter Coates",
+  "fundingAmount": 75000.00,
+  "repaymentAmount": 82500.00
+}
+
+### Create Loan - Small Business Ltd
+POST {{apiPath}}
+Content-Type: application/json
+
+{
+  "borrowerName": "Small Business Ltd",
+  "fundingAmount": 30000.00,
+  "repaymentAmount": 33000.00
+}
+
+# ==============================================================================
+# VALIDATION TESTS (Should return 400 Bad Request)
+# ==============================================================================
+
+### Create Loan - Missing Borrower Name (Validation Error)
+POST {{apiPath}}
+Content-Type: application/json
+
+{
+  "fundingAmount": 50000.00,
+  "repaymentAmount": 55000.00
+}
+
+### Create Loan - Invalid Repayment Amount (Validation Error)
+POST {{apiPath}}
+Content-Type: application/json
+
+{
+  "borrowerName": "Test User",
+  "fundingAmount": 50000.00,
+  "repaymentAmount": 0
+}
+
+### Create Loan - Invalid Funding Amount (Validation Error)
+POST {{apiPath}}
+Content-Type: application/json
+
+{
+  "borrowerName": "Test User",
+  "fundingAmount": -1000.00,
+  "repaymentAmount": 55000.00
+}
+
+# ==============================================================================
+# GET ALL LOANS
+# ==============================================================================
+
+### Get All Loans
+GET {{apiPath}}
+
+# ==============================================================================
+# GET LOAN BY ID
+# ==============================================================================
+
+### Get Loan by LoanId (Replace with actual LoanId from create response)
+GET {{apiPath}}/{{loanId}}
+
+### Get Loan by LoanId - Not Found (Non-existent ID)
+GET {{apiPath}}/12345678-1234-1234-1234-123456789012
+
+# ==============================================================================
+# GET LOANS BY BORROWER NAME
+# ==============================================================================
+
+### Get Loans by Borrower Name - Peter Coates
+GET {{apiPath}}/borrower/Peter Coates
+
+### Get Loans by Borrower Name - Omar Din
+GET {{apiPath}}/borrower/Omar Din
+### Get Loans by Borrower Name - Case Insensitive Test
+GET {{apiPath}}/borrower/peter coates
+
+### Get Loans by Borrower Name - Charlotte Rodriguez
+GET {{apiPath}}/borrower/Charlotte Rodriguez
+
+### Get Loans by Borrower Name - Not Found
+GET {{apiPath}}/borrower/NonExistent Borrower
+
+# ==============================================================================
+# DELETE LOAN
+# ==============================================================================
+
+### Delete Loan by LoanId (Replace with actual LoanId)
+DELETE {{apiPath}}/{{loanId}}
+
+### Delete Loan - Not Found (Non-existent ID)
+DELETE {{apiPath}}/99999999-9999-9999-9999-999999999999
+
+# ==============================================================================
+# WORKFLOW TEST SEQUENCE
+# ==============================================================================
+# Run these in order to test a complete workflow
+
+### 1. Create a loan for testing
+# @name workflowLoan
+POST {{apiPath}}
+Content-Type: application/json
+
+{
+  "borrowerName": "Workflow Test User",
+  "fundingAmount": 10000.00,
+  "repaymentAmount": 11000.00
+}
+
+### 2. Get the created loan (using dynamic variable)
+@workflowLoanId = {{workflowLoan.response.body.$.loanId}}
+GET {{apiPath}}/{{workflowLoanId}}
+
+### 3. Get all loans for this borrower
+GET {{apiPath}}/borrower/Workflow Test User
+
+### 4. Get all loans in system
+GET {{apiPath}}
+
+### 5. Delete the loan
+DELETE {{apiPath}}/{{workflowLoanId}}
+
+### 6. Verify deletion (should return 404)
+GET {{apiPath}}/{{workflowLoanId}}
+
+# ==============================================================================
+# PERFORMANCE TEST - Create Multiple Loans Quickly
+# ==============================================================================
+
+### Create Loan 1
+POST {{apiPath}}
+Content-Type: application/json
+
+{
+  "borrowerName": "Performance Test 1",
+  "fundingAmount": 5000.00,
+  "repaymentAmount": 5500.00
+}
+
+### Create Loan 2
+POST {{apiPath}}
+Content-Type: application/json
+
+{
+  "borrowerName": "Performance Test 2",
+  "fundingAmount": 6000.00,
+  "repaymentAmount": 6600.00
+}
+
+### Create Loan 3
+POST {{apiPath}}
+Content-Type: application/json
+
+{
+  "borrowerName": "Performance Test 3",
+  "fundingAmount": 7000.00,
+  "repaymentAmount": 7700.00
+}
+
+### Verify all created
+GET {{apiPath}}
