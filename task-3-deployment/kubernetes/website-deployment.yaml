@@ -31,6 +31,8 @@ spec:
       containers:
       - name: loan-website
         # Replace with your actual image from Docker Hub or ECR
+        # Example: YOUR_USERNAME/youlend-loan-website:latest
+        # Example: 123456789.dkr.ecr.us-east-1.amazonaws.com/youlend-loan-website:latest
         image: youlend-loan-website:latest
         imagePullPolicy: IfNotPresent
         
@@ -66,7 +68,7 @@ spec:
           failureThreshold: 3
 
 ---
-# Service for Website
+# Internal Service (ClusterIP) - For communication within cluster
 apiVersion: v1
 kind: Service
 metadata:
@@ -83,6 +85,32 @@ spec:
     port: 80
     targetPort: 80
     protocol: TCP
+
+---
+# BONUS: LoadBalancer Service - Exposes Website to Internet
+# Uncomment the section below to expose the website externally
+# This creates a cloud load balancer (costs money on AWS/GCP/Azure)
+#
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: loan-website-external
+#   namespace: youlend
+#   labels:
+#     app: loan-website
+#   annotations:
+#     # AWS specific annotations (uncomment if using AWS)
+#     # service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
+#     # service.beta.kubernetes.io/aws-load-balancer-scheme: "internet-facing"
+# spec:
+#   type: LoadBalancer
+#   selector:
+#     app: loan-website
+#   ports:
+#   - name: http
+#     port: 80
+#     targetPort: 80
+#     protocol: TCP
 
 ---
 # HorizontalPodAutoscaler for Website
@@ -105,3 +133,9 @@ spec:
       target:
         type: Utilization
         averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80

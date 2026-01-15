@@ -29,7 +29,7 @@ export class AppComponent {
   // Refresh loan list when a new loan is created
   onLoanCreated(): void {
     if (this.loanList) {
-      this.loanList.loadLoans();
+      this.loanList.loadLoans(true); // Pass true to indicate user-triggered refresh
     }
   }
 }
