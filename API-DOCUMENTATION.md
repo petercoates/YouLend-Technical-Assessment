@@ -2,7 +2,7 @@
 
 ## Base URL
 ```
-http://localhost:5001/api/loans
+http://localhost:5103/api/loans
 ```
 
 ## Endpoints
@@ -15,7 +15,7 @@ Creates a new loan record in the system.
 **Request Body:**
 ```json
 {
-  "borrowerName": "John Smith",
+  "borrowerName": "Peter Coates",
   "fundingAmount": 50000.00,
   "repaymentAmount": 55000.00
 }
@@ -25,19 +25,19 @@ Creates a new loan record in the system.
 ```json
 {
   "loanId": "a1b2c3d4-e5f6-4789-a012-3456789abcde",
-  "borrowerName": "John Smith",
+  "borrowerName": "Peter Coates",
   "fundingAmount": 50000.00,
   "repaymentAmount": 55000.00,
-  "createdAt": "2026-01-16T10:30:00Z"
+  "createdAt": "2026-01-11T10:30:00Z"
 }
 ```
 
 **Example:**
 ```bash
-curl -X POST http://localhost:5001/api/loans \
+curl -X POST http://localhost:5103/api/loans \
   -H "Content-Type: application/json" \
   -d '{
-    "borrowerName": "John Smith",
+    "borrowerName": "Peter Coates",
     "fundingAmount": 50000,
     "repaymentAmount": 55000
   }'
@@ -57,17 +57,17 @@ Retrieves all loans in the system.
   "loans": [
     {
       "loanId": "a1b2c3d4-e5f6-4789-a012-3456789abcde",
-      "borrowerName": "John Smith",
+      "borrowerName": "Peter Coates",
       "fundingAmount": 50000.00,
       "repaymentAmount": 55000.00,
-      "createdAt": "2026-01-16T10:30:00Z"
+      "createdAt": "2026-01-11T10:30:00Z"
     },
     {
       "loanId": "b2c3d4e5-f6a7-4890-b123-456789abcdef",
-      "borrowerName": "Jane Doe",
+      "borrowerName": "Omar Din",
       "fundingAmount": 75000.00,
       "repaymentAmount": 82500.00,
-      "createdAt": "2026-01-16T11:45:00Z"
+      "createdAt": "2026-01-11T11:45:00Z"
     }
   ]
 }
@@ -75,7 +75,7 @@ Retrieves all loans in the system.
 
 **Example:**
 ```bash
-curl http://localhost:5001/api/loans
+curl http://localhost:5103/api/loans
 ```
 
 ---
@@ -92,10 +92,10 @@ Retrieves a specific loan by its ID.
 ```json
 {
   "loanId": "a1b2c3d4-e5f6-4789-a012-3456789abcde",
-  "borrowerName": "John Smith",
+  "borrowerName": "Peter Coates",
   "fundingAmount": 50000.00,
   "repaymentAmount": 55000.00,
-  "createdAt": "2026-01-16T10:30:00Z"
+  "createdAt": "2026-01-11T10:30:00Z"
 }
 ```
 
@@ -108,7 +108,7 @@ Retrieves a specific loan by its ID.
 
 **Example:**
 ```bash
-curl http://localhost:5001/api/loans/a1b2c3d4-e5f6-4789-a012-3456789abcde
+curl http://localhost:5103/api/loans/a1b2c3d4-e5f6-4789-a012-3456789abcde
 ```
 
 ---
@@ -126,10 +126,10 @@ Retrieves all loans for a specific borrower.
 [
   {
     "loanId": "a1b2c3d4-e5f6-4789-a012-3456789abcde",
-    "borrowerName": "John Smith",
+    "borrowerName": "Peter Coates",
     "fundingAmount": 50000.00,
     "repaymentAmount": 55000.00,
-    "createdAt": "2026-01-16T10:30:00Z"
+    "createdAt": "2026-01-11T10:30:00Z"
   }
 ]
 ```
@@ -143,7 +143,7 @@ Retrieves all loans for a specific borrower.
 
 **Example:**
 ```bash
-curl http://localhost:5001/api/loans/borrower/John%20Smith
+curl http://localhost:5103/api/loans/borrower/unknown%20person
 ```
 
 ---
@@ -167,7 +167,7 @@ Permanently removes a loan from the system.
 
 **Example:**
 ```bash
-curl -X DELETE http://localhost:5001/api/loans/a1b2c3d4-e5f6-4789-a012-3456789abcde
+curl -X DELETE http://localhost:5103/api/loans/a1b2c3d4-e5f6-4789-a012-3456789abcde
 ```
 
 ---
@@ -185,7 +185,7 @@ Healthy
 
 **Example:**
 ```bash
-curl http://localhost:5001/health
+curl http://localhost:5103/health
 ```
 
 ---
