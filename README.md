@@ -18,7 +18,7 @@ This repository contains my complete solution for the YouLend Platform Engineer 
 
 ---
 
-## 📋 Table of Contents
+##  Table of Contents
 
 - [Quick Start](#-quick-start)
 - [Architecture](#-architecture)
@@ -44,9 +44,9 @@ docker compose up --build
 ```
 
 **Access:**
-- 🌐 **Website**: http://localhost:4200
-- 🔧 **API**: http://localhost:5103
-- 📚 **API Docs**: http://localhost:5103/swagger
+-  **Website**: http://localhost:4200
+-  **API**: http://localhost:5103
+-  **API Docs**: http://localhost:5103/swagger
 
 **Stop:**
 ```bash
@@ -55,7 +55,7 @@ docker compose down
 
 ---
 
-## 🏗️ Architecture
+##  Architecture
 
 ```
 ┌─────────────────────┐         ┌─────────────────────┐
@@ -77,7 +77,7 @@ docker compose down
 
 ---
 
-## 📁 Project Structure
+##  Project Structure
 
 ```
 YouLend-Technical-Assessment/
@@ -223,7 +223,7 @@ See [task-3-deployment/README.md](task-3-deployment/README.md) for:
 
 ---
 
-## 🧪 Testing
+##  Testing
 
 ### **Manual Testing with Loans.http**
 
@@ -253,7 +253,7 @@ cd task-1-api
 
 ---
 
-## 🛠️ Technologies Used
+##  Technologies Used
 
 | Category | Technology | Version |
 |----------|------------|---------|
@@ -271,7 +271,7 @@ cd task-1-api
 
 ---
 
-## 🚀 Deployment Options
+##  Deployment Options
 
 ### **1. Local Development**
 ```bash
